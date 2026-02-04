@@ -21,7 +21,7 @@ namespace Backpacks;
 public partial class Backpacks : BaseUnityPlugin
 {
 	internal const string ModName = "Backpacks";
-	private const string ModVersion = "1.3.6";
+	private const string ModVersion = "1.3.7";
 	private const string ModGUID = "org.bepinex.plugins.backpacks";
 
 	internal static readonly ConfigSync configSync = new(ModName) { DisplayName = ModName, CurrentVersion = ModVersion, MinimumRequiredVersion = ModVersion };
@@ -165,13 +165,23 @@ public partial class Backpacks : BaseUnityPlugin
 
 		Backpack.Prefab.GetComponent<ItemDrop>().m_itemData.Data().Add<ItemContainer>();
 
+		Localizer.OnLocalizationComplete += CheckAndAddBackpackSlot;
+	}
+
+	private void OnDestroy()
+	{
+		Localizer.OnLocalizationComplete -= CheckAndAddBackpackSlot;
+	}
+
+	private static void AddBackpackSlot() => AzuExtendedPlayerInventory.API.AddSlot(Localization.instance.Localize("$bp_backpack_slot_name"), player => Visual.visuals.TryGetValue(player.m_visEquipment, out Visual visual) ? visual.equippedBackpackItem : null, validateBackpack);
+
+	private static void CheckAndAddBackpackSlot()
+	{
 		if (AzuExtendedPlayerInventory.API.IsLoaded() && backpackSlot.Value == Toggle.On)
 		{
 			AddBackpackSlot();
 		}
 	}
-
-	private static void AddBackpackSlot() => AzuExtendedPlayerInventory.API.AddSlot(Localization.instance.Localize("$bp_backpack_slot_name"), player => Visual.visuals.TryGetValue(player.m_visEquipment, out Visual visual) ? visual.equippedBackpackItem : null, validateBackpack);
 
 	private static bool validateBackpack(ItemDrop.ItemData item) => item.Data().Get<ItemContainer>() is { } backpack && backpack.IsEquipable();
 
@@ -221,7 +231,7 @@ public partial class Backpacks : BaseUnityPlugin
 
 		if (ObjectDB.instance)
 		{
-			Inventory[] inventories = Player.s_players.Select(p => p.GetInventory()).Concat(FindObjectsOfType<Container>().Select(c => c.GetInventory())).Where(c => c is not null).ToArray();
+			Inventory[] inventories = Player.s_players.Select(p => p.GetInventory()).Concat(FindObjectsByType<Container>(FindObjectsSortMode.None).Select(c => c.GetInventory())).Where(c => c is not null).ToArray();
 			foreach (ItemDrop.ItemData itemdata in ObjectDB.instance.m_items.Select(p => p.GetComponent<ItemDrop>()).Where(c => c && c.GetComponent<ZNetView>()).Concat(ItemDrop.s_instances).Select(i => i.m_itemData).Concat(inventories.SelectMany(i => i.GetAllItems())))
 			{
 				if (itemdata.m_shared.m_name == Backpack.Prefab.name)
