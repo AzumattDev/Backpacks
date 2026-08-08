@@ -49,7 +49,12 @@ public class ItemContainer : ItemData
 					Item.m_shared.m_teleportable = Inventory.IsTeleportable();
 				}
 			}
-			Player.m_localPlayer?.GetInventory().UpdateTotalWeight();
+
+			if (Player.m_localPlayer is { } player)
+			{
+				player.GetInventory().UpdateTotalWeight();
+				InventoryChanged.BackpackInventoryChanged(player, Inventory);
+			}
 		};
 #endif
 	}

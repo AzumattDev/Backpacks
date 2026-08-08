@@ -335,6 +335,7 @@ public partial class Backpacks : BaseUnityPlugin
 				__result = true;
 				throw new SkipAddItemException();
 			}
+
 			return canAdd;
 		}
 
@@ -366,6 +367,7 @@ public partial class Backpacks : BaseUnityPlugin
 				__result = true;
 				throw new SkipAddItemException();
 			}
+
 			return canAdd;
 		}
 

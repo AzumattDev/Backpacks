@@ -158,6 +158,7 @@
         <Compile Include="ConfigLoader.cs"/>
         <Compile Include="CustomBackpack.cs"/>
         <Compile Include="CustomBackpackConfig.cs"/>
+        <Compile Include="InventoryChanged.cs"/>
         <Compile Include="ItemGroups.cs"/>
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)|$(Platform)' != 'API|AnyCPU'">
