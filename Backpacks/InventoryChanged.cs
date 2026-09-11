@@ -8,7 +8,7 @@ namespace Backpacks;
 
 public static class InventoryChanged
 {
-	private static Inventory activeBackpack;
+	private static Inventory activeBackpack = null!;
 
 	public static void BackpackInventoryChanged(Player player, Inventory backpack)
 	{

@@ -46,7 +46,7 @@ public class ItemContainer : ItemData
 
 				if (ZoneSystem.instance)
 				{
-					Item.m_shared.m_teleportable = Inventory.IsTeleportable();
+					Item.m_shared.m_teleportable = Inventory.IsTeleportable(false);
 				}
 			}
 

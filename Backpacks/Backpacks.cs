@@ -21,7 +21,7 @@ namespace Backpacks;
 public partial class Backpacks : BaseUnityPlugin
 {
 	internal const string ModName = "Backpacks";
-	private const string ModVersion = "1.3.9";
+	private const string ModVersion = "1.3.10";
 	private const string ModGUID = "org.bepinex.plugins.backpacks";
 
 	internal static readonly ConfigSync configSync = new(ModName) { DisplayName = ModName, CurrentVersion = ModVersion, MinimumRequiredVersion = ModVersion };
@@ -342,7 +342,7 @@ public partial class Backpacks : BaseUnityPlugin
 		private static Exception? Finalizer(Exception __exception) => __exception is SkipAddItemException ? null : __exception;
 	}
 
-	[HarmonyPatch(typeof(Inventory), nameof(Inventory.AddItem), typeof(ItemDrop.ItemData), typeof(int), typeof(int), typeof(int))]
+	[HarmonyPatch(typeof(Inventory), nameof(Inventory.AddItem), typeof(ItemDrop.ItemData), typeof(int), typeof(int), typeof(int), typeof(bool))]
 	private static class PreventMultipleBackpacksAddItemWithAmount
 	{
 		private class SkipAddItemException : Exception;
